@@ -1,58 +1,25 @@
 # 📛  학교 근처 점심 메뉴 & 식당 추천  / Lunch Menu & Restaurant Recommendation Nearby School
- AAA를 이용한 BBB
- 
- This is a AAA for BBB
+컨텐츠 기반 필터링을 이용한 우송대 근처 점심 메뉴 및 식당 추천
+
+ This is lunch menu & restaurant recommendation nearby Woosong University using Content Based Filtering.
 
 ## 🧾 프로젝트 소개 / Project Description
- HHH를 참고하고 FFF, GGG를 사용해 CCC DDD하기 위한 AAA BBB
+TMDB 5000 데이터를 이용한 콘텐츠 기반 필터링 파이선 코드를 참고해서 우송대 근처 식당과 메뉴로 치환해서 사용자에 입력에 따라 유사한 메뉴와 해당 메뉴를 제공하는 식당을 알려주는 프로그램
+머신러닝 전공 수업 중 프로젝트를 위해 추천 시스템과 해당 주제를 선정
+추천 시스템에 대한 수학적 원리는 알고 있었으나 이를 실현시키기 위해 해당 주제를 고름
+지금은 사용되지 잘 않는 방법이고 단점도 크지만 이미 많은 예시가 나와 있어 해당 알고리즘에 대해 시작하시 좋고 기존 영화 데이터셋말고 개성있는 주제로 해당 추천 시스템을 구현하고 싶어 고르게 되었음
+가능하다면, 사용자의 입력이 지속적으로 반영되는 알고리즘으로 발전시키려고 함
 
- 
- 기존의 III는 JJJ에 의한 KKK 문제가 있었으나 LLL의 MMM을 이용해서 NNN 방식으로 해결함
-
- 
- 이로 OOO에 대한 PPP의 해결이 가능해졌고 차후 QQQ나 RRR에 대해 도움을 줄 것으로 생각함
-
- 
- 다만, XXX의 YYY적 문제인 ZZZ로 인해 ABC, DEF 등의 문제가 발생할 수 있음
-
- 
- 기본적으로, LLL의 MMM을 이용해 SSS를 거쳐 TTT가 되어 PPP가 UUU가 되는 NNN 방식
-
- This is a AAA BBB to CCC DDD EEE by FFF GGG refered HHH
-
- 
- Previously, III was occuring KKK problem by JJJ. But, I(We) solved this problem as NNN by using MMM of LLL. 
- 
- From this, solving PPP in OOO is now possible and can be helped with QQQ or RRR·
-
- 
- However, this method can cause ABC or DEF problems from ZZZ of XXX due to YYYtical defect.
-
- 
- Basically, This is NNN with using MMM of LLL through SSS become TTT with PPP become UUU
-
+Program that recommending lunch menu and restaurants nearby Woosong University by refering content based filtering using TMDB 5000 dataset
 
 ### ⏲️ 개발 기간 / Develop Period
- 1970-01-01 ~ 1970-04-01 (약 3개월 / nearly 3 months)
-
-### 🧑‍🤝‍🧑 맴버 구성 / Author
- aaa : UI/UX 개발 / aaa : Developed UI/UX
- 
- ccc : 서버 구축 및 관리 / aaa : Develop & Managed server
- 
- eee : 자료 수집 및 전처리 / eee : Data collect & preprocessing
+ 2023-09-12 ~ 2023-12-07 (약 3개월 / nearly 3 months)
 
 ### 🖥️ 개발 환경 / Built with
-#### front-end
- aaa : 프론트 UI 구조 / Used as front UI structure
+#### 사용자 인터페이스 / UI
+ Pyqt5 : UI 구현을 위한 파이썬 GUI 라이브러리
 
-#### back-end
- ccc : 서버로 사용 / Used as Sever
- 
- ddd : 서버 관리 프로그램으로 사용 / Used as Sever management system
-
-#### AI model
- ggg : 
+#### 기계학습 모델 / Machine Learning model
  
  hhh : 
 
