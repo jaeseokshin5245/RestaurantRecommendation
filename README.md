@@ -7,10 +7,12 @@
 TMDB 5000 데이터를 이용한 콘텐츠 기반 필터링 파이선 코드를 참고해서 우송대 근처 식당과 메뉴로 치환해서 사용자에 입력에 따라 유사한 메뉴와 해당 메뉴를 제공하는 식당을 알려주는 프로그램
 머신러닝 전공 수업 중 프로젝트를 위해 추천 시스템과 해당 주제를 선정
 추천 시스템에 대한 수학적 원리는 알고 있었으나 이를 실현시키기 위해 해당 주제를 고름
-지금은 사용되지 잘 않는 방법이고 단점도 크지만 이미 많은 예시가 나와 있어 해당 알고리즘에 대해 시작하시 좋고 기존 영화 데이터셋말고 개성있는 주제로 해당 추천 시스템을 구현하고 싶어 고르게 되었음
+지금은 사용되지 잘 않는 방법이고 단점도 크지만 이미 많은 예시가 나와 있어 해당 알고리즘에 대해 시작하기 좋고 기존 영화 데이터셋말고 개성있는 주제로 해당 추천 시스템을 구현하고 싶어 고르게 되었음
 가능하다면, 사용자의 입력이 지속적으로 반영되는 알고리즘으로 발전시키려고 함
 
-Program that recommending lunch menu and restaurants nearby Woosong University by refering content based filtering using TMDB 5000 dataset
+Program that recommending lunch menu and restaurants nearby Woosong University by refering content based filtering using TMDB 5000 dataset. Chose this topic and recommendation system for the project of the machine learning major class
+In therothically, I want to realize this in real code even knew the mathematical principles about this
+
 
 ### ⏲️ 개발 기간 / Develop Period
  2023-09-12 ~ 2023-12-07 (약 3개월 / nearly 3 months)
