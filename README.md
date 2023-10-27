@@ -12,7 +12,10 @@ TMDB 5000 데이터를 이용한 콘텐츠 기반 필터링 파이선 코드를 
 
 Program that recommending lunch menu and restaurants nearby Woosong University by refering content based filtering using TMDB 5000 dataset. Chose this topic and recommendation system for the project of the machine learning major class
 In therothically, I want to realize this in real code even knew the mathematical principles about this
-
+I choose the this topic for the project of the Machine Learning major subject.  
+I already knew the mathematical principle of the content based system but I wanted to realize this one.  
+We don't use them anymore but it is well-known topic, lots of references and examples, and for a try with original topic rather than the moive datasets.  
+If possible, I want to develop with user input reflected and consisting algorithm.  
 
 ### ⏲️ 개발 기간 / Develop Period
  2023-09-12 ~ 2023-12-07 (약 3개월 / nearly 3 months)
@@ -23,7 +26,8 @@ In therothically, I want to realize this in real code even knew the mathematical
 
 #### 기계학습 모델 / Machine Learning model
  
- hhh : 
++ 컨텐츠 기반 필터링 : 
++ Content Based Filtering :
 
 ### 📤 버전별 업데이트 / Versioning
 0.1.0 : 최초 업데이트 / Initial Update
