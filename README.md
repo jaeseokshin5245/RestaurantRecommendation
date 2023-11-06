@@ -4,6 +4,8 @@
  This is lunch menu & restaurant recommendation nearby Woosong University using Content Based Filtering.
 
 ## 🧾 프로젝트 소개 / Project Description
+![캡처](https://github.com/jaeseokshin5245/RestaurantRecommendation/assets/142656933/7151ea8c-946a-44d1-9e87-1ba52db8efee)
+
 TMDB 5000 데이터를 이용한 콘텐츠 기반 필터링 파이선 코드를 참고해서 우송대 근처 식당과 메뉴로 치환해서 사용자에 입력에 따라 유사한 메뉴와 해당 메뉴를 제공하는 식당을 알려주는 프로그램
 머신러닝 전공 수업 중 프로젝트를 위해 추천 시스템과 해당 주제를 선정
 추천 시스템에 대한 수학적 원리는 알고 있었으나 이를 실현시키기 위해 해당 주제를 고름
