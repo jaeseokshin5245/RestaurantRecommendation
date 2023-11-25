@@ -1,33 +1,39 @@
-import sys
-import pandas as pd
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel,  QGridLayout
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt
-
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+import sys
 
 from Function import RestaurantRecommender
-
-recommender = RestaurantRecommender()
-recommender.preprocess_data()
-recommender.calculate_similarity()
-recommender.calculate_weighted_ratings(0.6)
-similar_restaurants = recommender.find_similar_restaurant('쌍둥이네 떡볶이', 10)
-result = recommender.display_recommendations(similar_restaurants)
-
-result_title, result_point, result_pointnum = result
+from resources.load_main import SplashScreen
 
 class MyApp(QWidget):
 
-    def __init__(self):
+    def __init__(self, splash_screen):
         super().__init__()
+        self.splash_screen = splash_screen
         self.initUI()
 
     def initUI(self):
         self.setWindowProperties()
+        self.simulate_loading()
+        self.pro_processing()
         self.main_grid()
+        self.splash_screen.hide_splash()
+        self.image_paths = ['./studies/image1.jpg', './studies/image2.jpg']
+        self.current_image_index = 0
+        self.info_image_index = 0
+        self.load_image()
+
         self.show()
+
+    def simulate_loading(self):
+        total_steps = 100
+        for i in range(total_steps):
+            progress_value = int((i / total_steps) * 100)
+            self.splash_screen.set_progress(progress_value)
+            QApplication.processEvents()
+            import time
+            time.sleep(0.05)
         
     def setWindowProperties(self):
         self.setWindowTitle('Foodstagram')
@@ -49,6 +55,19 @@ class MyApp(QWidget):
         
         self.bold_font = QFont("Instagram Sans", 12)
         self.bold_font.setBold(True)
+
+    def pro_processing(self):
+        recommender = RestaurantRecommender()
+        recommender.preprocess_data()
+        recommender.calculate_similarity()
+        recommender.calculate_weighted_ratings(0.6)
+        similar_restaurants = recommender.find_similar_restaurant('쌍둥이네 떡볶이', 10)
+        result = recommender.display_recommendations(similar_restaurants)
+        
+        self.result_title, self.result_point, self.result_pointnum, result_menus, self.result_num = result
+        self.menus_list = [menu.split(',') for menu in result_menus]
+        
+        return self.result_title, self.result_point, self.result_pointnum, self.menus_list, self.result_num
         
     def main_grid(self):
         main_grid = QGridLayout()
@@ -57,16 +76,16 @@ class MyApp(QWidget):
         main_grid.addLayout(self.TitleSubLayout(), 0, 0)
         main_grid.addLayout(self.ImageSubLayout(), 1, 0)
         main_grid.addLayout(self.ShareSubLayout(), 2, 0)
-        main_grid.addLayout(self.LikesSubLayout(result_pointnum[0]), 3, 0)
-        main_grid.addLayout(self.CommentSubLayout(result_title[0]), 4, 0)
-        main_grid.addLayout(self.AddCommentSubLayout(), 5, 0)
-        main_grid.addLayout(self.HashtagSubLayout(), 6, 0)
+        main_grid.addLayout(self.LikesSubLayout(self.result_pointnum[0]), 3, 0)
+        main_grid.addLayout(self.CommentSubLayout(self.result_title[0]), 4, 0)
+        main_grid.addLayout(self.AddCommentSubLayout(self.result_num[0]), 5, 0)
+        main_grid.addLayout(self.HashtagSubLayout(self.menus_list[0][0], self.menus_list[0][1], self.menus_list[0][3],
+                                                   self.menus_list[0][4], self.menus_list[0][5]), 6, 0)
         main_grid.addLayout(self.RecentSubLayout(), 7, 0)
         
         self.setLayout(main_grid)
-    
+
     def TitleSubLayout(self):
-        
         dots_label = QLabel()
         dots_icon = QIcon("./resources/dots.png")  
         dots_label.setPixmap(dots_icon.pixmap(64, 64))
@@ -97,31 +116,45 @@ class MyApp(QWidget):
         self.image_layout = QGridLayout()
         self.image_label = QLabel()
         
-        self.pixmap = QPixmap("./studies/image1.jpg")
+        self.pixmap = QPixmap()
         self.image_label.setPixmap(self.pixmap)
         self.image_label.setGeometry(0, 0, 512, 512)
         self.image_layout.addWidget(self.image_label, 0, 0)
         
         return self.image_layout
     
+    def load_image(self):
+        self.pixmap = QPixmap(self.image_paths[self.current_image_index])
+        self.image_label.setPixmap(self.pixmap)
+
+    def update_info(self, decrement= False):
+        if decrement:
+            # 여기 어딘가에서 에러가 나는데 띵킹이 필요함
+            self.menus_list[0] = [(x + 1) % len(self.menus_list[0]) for x in self.menus_list[0]]
+        else:
+            self.menus_list[0] = [(x - 1) % len(self.menus_list[0]) for x in self.menus_list[0]]
+
+        self.clearLayout()
+        self.main_grid()
+
+    def clearLayout(self):
+        while self.layout.count():
+            item = self.layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+
     def keyPressEvent(self, event):
-        # Handle left arrow key press for switching to the previous image
         if event.key() == Qt.Key_Left:
             self.current_image_index = (self.current_image_index - 1) % len(self.image_paths)
             self.load_image()
+            self.update_info()
 
-        # Handle right arrow key press for switching to the next image
         if event.key() == Qt.Key_Right:
             self.current_image_index = (self.current_image_index + 1) % len(self.image_paths)
             self.load_image()
+            self.update_info()
 
-    
-    def load_image(self):
-        self.pixmap = QPixmap(self.image_path[self.current_image_index])
-        self.image_label.setPixmap(self.pixmap)
-        self.image_label.setScaledContents(True)
-
-    
     def ShareSubLayout(self):
         
         blank_label = QLabel()
@@ -161,7 +194,7 @@ class MyApp(QWidget):
     
     def LikesSubLayout(self, sim):
         likes_layout = QGridLayout() 
-        likes_label = QLabel("{} % similiar with your previous restaurant".format(sim))
+        likes_label = QLabel("{} likes".format(sim))
         likes_label.setFont(self.bold_font)
         likes_layout.addWidget(likes_label, 0, 0)
         
@@ -184,18 +217,18 @@ class MyApp(QWidget):
         
         return comment_layout
         
-    def AddCommentSubLayout(self):
+    def AddCommentSubLayout(self, rate_num):
         addcomment_layout = QGridLayout()
-        addcomment_label = QLabel("See all 1,234 comments")
+        addcomment_label = QLabel("See all  {} comments".format(rate_num))
         addcomment_label.setStyleSheet("color: #868686;")
         addcomment_label.setFont(self.gen_font)
         addcomment_layout.addWidget(addcomment_label, 0, 0)
         
         return addcomment_layout
         
-    def HashtagSubLayout(self):
+    def HashtagSubLayout(self, menu_1, menu_2, menu_3, menu_4, menu_5):
         hashtag_layout = QGridLayout()
-        hashtag_label = QLabel("#hashtag1 #hashtag2")
+        hashtag_label = QLabel("#{} #{} #{} #{} #{}".format(menu_1, menu_2, menu_3, menu_4, menu_5))
         hashtag_label.setStyleSheet("color: #2F729B;")
         hashtag_label.setFont(self.gen_font)
         hashtag_layout.addWidget(hashtag_label, 0, 0)
@@ -213,5 +246,7 @@ class MyApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = MyApp()
+    splash = SplashScreen()
+    splash.show()
+    ex = MyApp(splash)
     sys.exit(app.exec_())

@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 class RestaurantRecommender:
     def __init__(self):
-        self.data = pd.read_csv('./source.csv', encoding='utf-8')
+        self.data = pd.read_csv('./source.csv', encoding='cp949')
 
     def preprocess_data(self):
         self.data['메뉴'] = self.data['메뉴'].apply(lambda x: ''.join(x))
@@ -39,8 +39,9 @@ class RestaurantRecommender:
         sim_point = recommendations[['별점']]
         sim_pointnum = recommendations[['유사도']]
         sim_menu = recommendations[['메뉴']]
+        sim_num = recommendations[['별점 수']]
         
-        info_list = [sim_title, sim_point, sim_pointnum,sim_menu]
+        info_list = [sim_title, sim_point, sim_pointnum, sim_menu, sim_num]
         list_count = 0
         result_array = []
 
@@ -50,11 +51,13 @@ class RestaurantRecommender:
             temp_array = temp_array[1:]
             temp_array = [s.lstrip() for s in temp_array]
             if list_count == 2:
-                temp_array = [t[:-4] for t in temp_array]
+                temp_array = [t[:-7] for t in temp_array]
+            elif list_count == 3:
+                temp_array[0].split(',')
             list_count += 1
             result_array.append(temp_array)
-        return result_array[0], result_array[1], result_array[2]
-    
+        return result_array[0], result_array[1], result_array[2], result_array[3], result_array[4]    
+
 if __name__ == '__main__':
     recommender = RestaurantRecommender()
     recommender.preprocess_data()
