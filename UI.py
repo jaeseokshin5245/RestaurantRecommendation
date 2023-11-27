@@ -14,15 +14,43 @@ class MyApp(QWidget):
         self.initUI()
 
     def initUI(self):
+        self.image_paths = ['./studies/image1.jpg', './studies/image2.jpg',
+                            './studies/image3.jpg', './studies/image4.jpg',
+                            './studies/image5.jpg', './studies/image6.jpg',
+                            './studies/image7.jpg', './studies/image8.jpg',
+                            './studies/image9.jpg', './studies/image10.jpg',
+                            ]
+        self.info_image_index = 0
+        
         self.setWindowProperties()
         self.simulate_loading()
-        self.pro_processing()
-        self.main_grid()
+        self.pro_processing()    
+        self.Main_grid()
         self.splash_screen.hide_splash()
-        self.image_paths = ['./studies/image1.jpg', './studies/image2.jpg']
         self.current_image_index = 0
-        self.info_image_index = 0
         self.load_image()
+        
+        self.likes_label = self.LikesSubLayout(self.result_pointnum[self.info_image_index])
+        self.main_grid.addLayout(self.likes_label, 3, 0)
+        
+        self.comment_label = self.CommentSubLayout(self.result_title[self.info_image_index])
+        self.main_grid.addLayout(self.comment_label, 4, 0)
+        
+        self.addcomment_label = self.AddCommentSubLayout(self.result_num[self.info_image_index])
+        self.main_grid.addLayout(self.addcomment_label, 5, 0)
+        
+        self.hashtag_label = self.HashtagSubLayout(
+            self.menus_list[self.info_image_index][0],
+            self.menus_list[self.info_image_index][1],
+            self.menus_list[self.info_image_index][2],
+            self.menus_list[self.info_image_index][3],
+            self.menus_list[self.info_image_index][4],
+            )
+        
+        self.main_grid.addLayout(self.hashtag_label, 6, 0)
+        
+        self.recent_label = self.RecentSubLayout(self.info_image_index)
+        self.main_grid.addLayout(self.recent_label, 7, 0)
 
         self.show()
 
@@ -61,7 +89,7 @@ class MyApp(QWidget):
         recommender.preprocess_data()
         recommender.calculate_similarity()
         recommender.calculate_weighted_ratings(0.6)
-        similar_restaurants = recommender.find_similar_restaurant('쌍둥이네 떡볶이', 10)
+        similar_restaurants = recommender.find_similar_restaurant('아키타', 10)
         result = recommender.display_recommendations(similar_restaurants)
         
         self.result_title, self.result_point, self.result_pointnum, result_menus, self.result_num = result
@@ -69,21 +97,35 @@ class MyApp(QWidget):
         
         return self.result_title, self.result_point, self.result_pointnum, self.menus_list, self.result_num
         
-    def main_grid(self):
-        main_grid = QGridLayout()
-        main_grid.setSpacing(3)   
+    def Main_grid(self):
+        self.main_grid = QGridLayout()
+        self.main_grid.setSpacing(3)   
+        self.setLayout(self.main_grid)
+        self.main_grid.addLayout(self.TitleSubLayout(), 0, 0)
+        self.main_grid.addLayout(self.ImageSubLayout(), 1, 0)
+        self.main_grid.addLayout(self.ShareSubLayout(), 2, 0)
 
-        main_grid.addLayout(self.TitleSubLayout(), 0, 0)
-        main_grid.addLayout(self.ImageSubLayout(), 1, 0)
-        main_grid.addLayout(self.ShareSubLayout(), 2, 0)
-        main_grid.addLayout(self.LikesSubLayout(self.result_pointnum[0]), 3, 0)
-        main_grid.addLayout(self.CommentSubLayout(self.result_title[0]), 4, 0)
-        main_grid.addLayout(self.AddCommentSubLayout(self.result_num[0]), 5, 0)
-        main_grid.addLayout(self.HashtagSubLayout(self.menus_list[0][0], self.menus_list[0][1], self.menus_list[0][3],
-                                                   self.menus_list[0][4], self.menus_list[0][5]), 6, 0)
-        main_grid.addLayout(self.RecentSubLayout(), 7, 0)
+        likes_layout = self.LikesSubLayout(self.result_pointnum[self.info_image_index])
+        self.main_grid.addLayout(likes_layout, 3, 0)
         
-        self.setLayout(main_grid)
+        comment_layout = self.CommentSubLayout(self.result_title[self.info_image_index])
+        self.main_grid.addLayout(comment_layout, 4, 0)
+        
+        addcomment_layout = self.AddCommentSubLayout(self.result_num[self.info_image_index])
+        self.main_grid.addLayout(addcomment_layout, 5, 0)
+
+        hashtag_layout = self.HashtagSubLayout(
+            self.menus_list[self.info_image_index][0],
+            self.menus_list[self.info_image_index][1],
+            self.menus_list[self.info_image_index][2],
+            self.menus_list[self.info_image_index][3],
+            self.menus_list[self.info_image_index][4]
+        )
+        
+        self.main_grid.addLayout(hashtag_layout, 6, 0)
+        
+        recent_layout = self.RecentSubLayout(self.info_image_index)
+        self.main_grid.addLayout(recent_layout, 7, 0)
 
     def TitleSubLayout(self):
         dots_label = QLabel()
@@ -118,45 +160,87 @@ class MyApp(QWidget):
         
         self.pixmap = QPixmap()
         self.image_label.setPixmap(self.pixmap)
-        self.image_label.setGeometry(0, 0, 512, 512)
+        self.image_label.setGeometry(0, 0, 600, 800)
         self.image_layout.addWidget(self.image_label, 0, 0)
         
         return self.image_layout
     
     def load_image(self):
-        self.pixmap = QPixmap(self.image_paths[self.current_image_index])
+        self.pixmap = QPixmap(self.image_paths[self.info_image_index])
         self.image_label.setPixmap(self.pixmap)
 
-    def update_info(self, decrement= False):
-        if decrement:
-            # 여기 어딘가에서 에러가 나는데 띵킹이 필요함
-            self.menus_list[0] = [(x + 1) % len(self.menus_list[0]) for x in self.menus_list[0]]
-        else:
-            self.menus_list[0] = [(x - 1) % len(self.menus_list[0]) for x in self.menus_list[0]]
+    def update_info(self, increment=True):
+        if increment and self.info_image_index < 9:
+            self.info_image_index += 1
+        elif not increment and self.info_image_index > 0:
+            self.info_image_index -= 1
+        
+        likes_layout = self.LikesSubLayout(self.result_pointnum[self.info_image_index])
+        comment_layout = self.CommentSubLayout(self.result_title[self.info_image_index])
+        addcomment_layout = self.AddCommentSubLayout(self.result_num[self.info_image_index])
+        hashtag_layout = self.HashtagSubLayout(
+            self.menus_list[self.info_image_index][0],
+            self.menus_list[self.info_image_index][1],
+            self.menus_list[self.info_image_index][2],
+            self.menus_list[self.info_image_index][3],
+            self.menus_list[self.info_image_index][4]
+        )
+        recent_layout = self.RecentSubLayout(self.info_image_index)
+        
+        layout_item = self.main_grid.itemAtPosition(3, 0)
+        if layout_item:
+            existing_layout = layout_item.layout()
+            if existing_layout:
+                self.main_grid.removeItem(existing_layout)
 
-        self.clearLayout()
-        self.main_grid()
+        self.main_grid.addLayout(likes_layout, 3, 0)
+        self.main_grid.addLayout(comment_layout, 4, 0)
+        self.main_grid.addLayout(addcomment_layout, 5, 0)
+        self.main_grid.addLayout(hashtag_layout, 6, 0)
+        self.main_grid.addLayout(recent_layout, 7, 0)
+        
+        likes_label = likes_layout.itemAtPosition(0, 0).widget()
+        likes_value = self.result_pointnum[self.info_image_index]
+        self.updateLikesText(likes_label, likes_value)   
+        
+        comment_content_label = comment_layout.itemAtPosition(0, 1).widget()
+        comment_value = self.result_title[self.info_image_index]
+        self.updateCommentText(comment_content_label, comment_value)
 
-    def clearLayout(self):
-        while self.layout.count():
-            item = self.layout.takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
-
+        addcomment_label = addcomment_layout.itemAtPosition(0, 0).widget()
+        addcomment_value = self.result_num[self.info_image_index]
+        self.updateAddCommText(addcomment_label, addcomment_value)
+        
+        hashtag_label = hashtag_layout.itemAtPosition(0, 0).widget()
+        hashtag_value = [self.menus_list[self.info_image_index][0],
+                         self.menus_list[self.info_image_index][1],
+                         self.menus_list[self.info_image_index][2],
+                         self.menus_list[self.info_image_index][3],
+                         self.menus_list[self.info_image_index][4]
+                         ]
+        self.updateHashtagText(hashtag_label, hashtag_value[0], 
+                               hashtag_value[1],
+                               hashtag_value[2],
+                               hashtag_value[3],
+                               hashtag_value[4])
+        
+        recent_label = recent_layout.itemAtPosition(0, 0).widget()
+        recent_value = self.info_image_index
+        self.updateRecentText(recent_label, recent_value)
+        
+        self.pixmap = QPixmap(self.image_paths[self.info_image_index])
+        self.image_label.setPixmap(self.pixmap)
+        
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Left:
-            self.current_image_index = (self.current_image_index - 1) % len(self.image_paths)
             self.load_image()
-            self.update_info()
+            self.update_info(False)
 
         if event.key() == Qt.Key_Right:
-            self.current_image_index = (self.current_image_index + 1) % len(self.image_paths)
             self.load_image()
             self.update_info()
-
-    def ShareSubLayout(self):
         
+    def ShareSubLayout(self):    
         blank_label = QLabel()
         blank_icon = QIcon("./resources/blank.png")  
         blank_label.setPixmap(blank_icon.pixmap(64, 64))
@@ -198,6 +282,8 @@ class MyApp(QWidget):
         likes_label.setFont(self.bold_font)
         likes_layout.addWidget(likes_label, 0, 0)
         
+        self.updateLikesText(likes_label, sim)
+
         return likes_layout
         
     def CommentSubLayout(self, rest_title):
@@ -215,6 +301,8 @@ class MyApp(QWidget):
         comment_layout.addWidget(comment_content_label, 0, 1)
         comment_layout.addWidget(blank_label, 0, 2)
         
+        self.updateCommentText(comment_content_label, rest_title)
+        
         return comment_layout
         
     def AddCommentSubLayout(self, rate_num):
@@ -223,6 +311,8 @@ class MyApp(QWidget):
         addcomment_label.setStyleSheet("color: #868686;")
         addcomment_label.setFont(self.gen_font)
         addcomment_layout.addWidget(addcomment_label, 0, 0)
+        
+        self.updateAddCommText(addcomment_label, rate_num)
         
         return addcomment_layout
         
@@ -233,17 +323,36 @@ class MyApp(QWidget):
         hashtag_label.setFont(self.gen_font)
         hashtag_layout.addWidget(hashtag_label, 0, 0)
         
+        self.updateHashtagText(hashtag_label, menu_1, menu_2, menu_3, menu_4, menu_5)
+        
         return hashtag_layout
         
-    def RecentSubLayout(self):
+    def RecentSubLayout(self, rank):
         recent_layout = QGridLayout()
-        recent_label = QLabel("Uploaded 0 days ago")
+        recent_label = QLabel("Uploaded {} days ago".format(str(int(rank)+1)))
         recent_label.setStyleSheet("color: #868686;")
         recent_label.setFont(QFont("Instagram Sans", 9))
         recent_layout.addWidget(recent_label, 0, 0)
         
+        self.updateRecentText(recent_label, rank)
+        
         return recent_layout
-
+    
+    def updateLikesText(self, label, sim):
+        label.setText("{} likes".format(sim))
+        
+    def updateCommentText(self, label, rest_title):
+        label.setText("{}".format(rest_title))
+        
+    def updateAddCommText(self, label, rate_num):
+        label.setText("See all {} comments".format(rate_num))
+        
+    def updateHashtagText(self, label, menu_1, menu_2, menu_3, menu_4, menu_5):
+        label.setText("#{} #{} #{} #{} #{}".format(menu_1, menu_2, menu_3, menu_4, menu_5))
+        
+    def updateRecentText(self, label, rank):
+        label.setText("Uploaded {} days ago".format(str(int(rank)+1)))
+        
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     splash = SplashScreen()
